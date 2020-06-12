@@ -7,3 +7,4 @@ parserOptions:
 rules:
   semi: 0
   curly: 1
+  space-before-function-paren: 0
