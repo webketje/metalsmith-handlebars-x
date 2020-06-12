@@ -1,6 +1,6 @@
 {
   "name": "metalsmith-handlebars-x",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "The best plugin for metalsmith + Handlebars. Global/local partials, in-place & layout compilation, and maximum flexibility.",
   "homepage": "https://github.com/webketje/metalsmith-handlebars-x#README.md",
   "bugs": "https://github.com/webketje/metalsmith-handlebars-x/issues",
@@ -17,8 +17,8 @@
     "helpers"
   ],
   "author": "Kevin Van Lierde <kevin.van.lierde@gmail.com> (https://webketje.com)",
-  "engines" : {
-    "node" : ">=8"
+  "engines": {
+    "node": ">=8"
   },
   "main": "lib/index.js",
   "scripts": {
