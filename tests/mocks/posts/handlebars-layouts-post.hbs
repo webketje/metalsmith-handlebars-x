@@ -1,0 +1,15 @@
+{{#extend "handlebars-layouts"~}}
+ 
+    {{#content "header"~}}
+        <h1>Goodnight Moon</h1>
+    {{/content}}
+ 
+    {{#content "main" mode="append"~}}
+        <p>Dolor sit amet.</p>
+    {{/content}}
+ 
+    {{#content "footer" mode="prepend"~}}
+        <p>MIT License</p>
+    {{/content}}
+ 
+{{/extend}}

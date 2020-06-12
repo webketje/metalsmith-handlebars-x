@@ -1,0 +1,13 @@
+language: node_js
+node_js:
+  - node
+  - 14
+  - 12
+  - 10
+  - 8
+  - 6
+os:
+  - linux
+script:
+  - npm lint
+  - npm test

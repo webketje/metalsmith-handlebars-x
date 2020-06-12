@@ -1,0 +1,18 @@
+{
+  "hooks": {
+    "after:bump": "node_modules/.bin/auto-changelog -p"
+  },
+  "git": {
+    "commitMessage": "Release ${version}",
+    "commitArgs": ["-S"],
+    "tagAnnotation": "Release ${version}",
+    "tagArgs": ["-s"]
+  },
+  "npm": {
+    "publish": true
+  },
+  "github": {
+    "releaseName": "metalsmith-handlebars-x ${version}",
+    "tokenRef": "GITHUB_TOKEN"
+  }
+}

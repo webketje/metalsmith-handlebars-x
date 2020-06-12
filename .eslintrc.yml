@@ -1,0 +1,9 @@
+env:
+  commonjs: true
+extends:
+  - standard
+parserOptions:
+  ecmaVersion: 11
+rules:
+  semi: 0
+  curly: 1

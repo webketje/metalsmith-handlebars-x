@@ -1,0 +1,56 @@
+{
+  "name": "metalsmith-handlebars-x",
+  "version": "0.1.0",
+  "description": "The best plugin for metalsmith + Handlebars. Global/local partials, in-place & layout compilation, and maximum flexibility.",
+  "homepage": "https://github.com/webketje/metalsmith-handlebars-x#README.md",
+  "bugs": "https://github.com/webketje/metalsmith-handlebars-x/issues",
+  "license": "LGPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/webketje/metalsmith-handlebars-x.git"
+  },
+  "keywords": [
+    "metalsmith",
+    "plugin",
+    "handlebars",
+    "partials",
+    "helpers"
+  ],
+  "author": "Kevin Van Lierde <kevin.van.lierde@gmail.com> (https://webketje.com)",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "ospec",
+    "format": "prettier --write .",
+    "lint": "eslint .",
+    "release": "release-it"
+  },
+  "directories": {
+    "test": "./tests",
+    "lib": "./lib"
+  },
+  "files": [
+    "/lib/index.js",
+    "/lib/helpers.js"
+  ],
+  "dependencies": {
+    "debug": "*",
+    "handlebars": "*",
+    "multimatch": "*"
+  },
+  "devDependencies": {
+    "auto-changelog": "^2.0.0",
+    "eslint": "^7.2.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "handlebars-layouts": "^3.1.4",
+    "metalsmith": "^2.3.0",
+    "metalsmith-discover-partials": "^0.1.2",
+    "metalsmith-layouts": "^2.3.1",
+    "ospec": "*",
+    "prettier": "^2.0.5",
+    "release-it": "^13.6.2"
+  }
+}
