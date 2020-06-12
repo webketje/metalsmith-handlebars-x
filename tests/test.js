@@ -62,7 +62,7 @@ var partials = {
   }
 };
 
-function cleanup() {}
+function cleanup() { }
 
 test.spec('Handlebars.partials support', function () {
   var files;
@@ -87,11 +87,10 @@ test.spec('Handlebars.partials support', function () {
               return prefix + value;
             }
           },
-          data: (file, metadata) => {
-            return Object.assign(
-              {
-                extraProperty: 'extra'
-              },
+          context: (file, metadata) => {
+            return Object.assign({
+              extraProperty: 'extra'
+            },
               metadata,
               file
             );
