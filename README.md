@@ -1,26 +1,22 @@
 # Metalsmith+handlebars
 
-The best plugin for metalsmith + Handlebars. Global/local partials, in-place & layout compilation, and maximum customizability. Combines all of [metalsmith-handlebars], [metalsmith-handlebars-contents], [metalsmith-handlebars-layouts], [metalsmith-discover-helpers], [metalsmith-discover-partials], [@goodthnx/metalsmith-handlebars], [metalsmith-nested], [metalsmith-register-helpers], [metalsmith-register-partials] and adds more. Written out of frustration with incomplete and/or complex existing options.
+The best plugin for metalsmith + Handlebars. Global/local partials, in-place & layout compilation, and maximum customizability.
+
+Combines all of [metalsmith-handlebars], [metalsmith-handlebars-contents], [metalsmith-handlebars-layouts], [metalsmith-discover-helpers], [metalsmith-discover-partials], [@goodthnx/metalsmith-handlebars], [metalsmith-nested], [metalsmith-register-helpers], [metalsmith-register-partials] and adds more. Written out of frustration with incomplete and/or complex existing options.
 
 [![metalsmith: plugin][metalsmith-badge]][metalsmith-url]
 [![npm: version][npm-badge]][npm-url]
 [![travis: build][ci-badge]][ci-url]
 [![license: LGPL-3.0][license-badge]][license-url]
 
-```js
-const handlebars = require('metalsmith-handlebars-x')({
-  pattern: '**/*.{hbs,handlebars}',
-  layout: true,
-  instance: null,
-  partials: 'partials',
-  metadata: function (page, global) {
-    return Object.assign({}, global, page);
-  },
-  helpers: {}
-});
+## Features
 
-metalsmith.use(handlebars);
-```
+- filter files by `pattern`
+- auto-load global and local partials found in directory specified by option `partials`
+- compile contents (like metalsmith-in-place) and layout (like metalsmith-layouts)
+- includes useful basic `set` and `call` helpers
+- allows custom Handlebars, partials, helpers
+- also works with [metalsmith-layouts], [handlebars-layouts]
 
 ## Install
 
@@ -39,9 +35,20 @@ yarn add metalsmith-handlebars-x
 ## Quickstart
 
 ```js
-var handlebars = require('metalsmith-handlebars-x');
+var xhandlebars = require('metalsmith-handlebars-x');
 
-metalsmith.use(handlebars());
+// use defaults
+metalsmith.use(xhandlebars());
+
+// use defaults (explicit)
+metalsmith.use(xhandlebars({
+  instance: require('handlebars'),
+  pattern: '**/*.{hbs,handlebars}',
+  layout: true,
+  partials: '**/partials/**.{hbs,handlebars}',
+  helpers: {},
+  context: (filemeta, globalmeta) => Object.assign({}, globalmeta, filemeta)
+});
 ```
 
 ## Debug
@@ -62,7 +69,13 @@ set DEBUG=metalsmith-handlebars-x
 
 ## Usage
 
-### Global partials
+### Partials
+
+Partials will be looked for in the directory specified in the `partials` option.  
+A partial at `partials/blockquote.hbs` will be usable in templates as `blockquote`.  
+A partial at `partials/layout/default.hbs` will be usable in templates as `layout/default`.
+
+#### Global partials
 
 Global partials (available to all templates) can be registered either by specifying a directory in the `Metalsmith.source` directory:
 
@@ -70,7 +83,7 @@ Global partials (available to all templates) can be registered either by specify
 metalsmith.use(handlebars({ partials: 'partials' }));
 ```
 
-and by passing the Handlebars instance to the plugin:
+or by passing the Handlebars instance to the plugin:
 
 ```js
 var Handlebars = require('handlebars');
@@ -84,7 +97,7 @@ metalsmith.use(handlebars({ instance: Handlebars }));
 
 Both can be used together!
 
-### Local partials
+#### Local partials
 
 Local partials will be available to all templates that reside in the same directory.  
 In the directory structure below both `.md` files have access to partial `layout/default`.
@@ -116,7 +129,7 @@ register them directly on a Handlebars instance passed to the `instance` option.
 Specify a custom `metadata` option to map file & global metadata in your templates, e.g:
 
 ```js
-metadata: function(filemeta, globalmeta) {
+context: function(filemeta, globalmeta) {
   return {
     page: filemeta,
     site: globalmeta
@@ -129,12 +142,28 @@ In your templates:
 ```html
 {{ site.sitename }} {{ page.stats.birthTime }}
 ```
+### Usage with handlebars-layouts
 
-### With metalsmith-layouts & metalsmith-discover-partials (discouraged)
+Relatively straight-forward:
+
+```js
+const Handlebars = require('handlebars');
+const hbsLayouts = require('handlebars-layouts')(Handlebars);
+const xhandlebars = require('metalsmith-handlebars-x');
+
+Handlebars.registerHelper(hbsLayouts);
+
+metalsmith.use(xhandlebars({ instance: Handlebars }));
+```
+
+### With metalsmith-layouts & metalsmith-discover-partials
+
+You can use this plugin together with metalsmith-layouts & discover-partials but you should specify `layout: false` in order to avoid conflicts.  
+metalsmith-handlebars-x will then only compile file `contents`. See [test.js](./tests/test.js#L174) for an example.
 
 ## License
 
-[LGPL v0.3](./LICENSE)
+[LGPL v3](./LICENSE)
 
 [npm-badge]: https://img.shields.io/npm/v/metalsmith-handlebars-x
 [npm-url]: https://www.npmjs.com/package/metalsmith-handlebars-x
@@ -145,6 +174,8 @@ In your templates:
 [metalsmith-badge]: https://img.shields.io/badge/metalsmith-plugin-green.svg?longCache=true
 [metalsmith-url]: https://metalsmith.io/
 [metalsmith-handlebars]: https://www.npmjs.com/package/metalsmith-handlebars
+[metalsmith-layouts]: https://www.npmjs.com/package/metalsmith-layouts
+[handlebars-layouts]: https://www.npmjs.com/package/handlebars-layouts
 [metalsmith-handlebars-contents]: https://www.npmjs.com/package/metalsmith-handlebars-contents
 [metalsmith-handlebars-layouts]: https://www.npmjs.com/package/metalsmith-handlebars-layouts
 [metalsmith-discover-helpers]: https://www.npmjs.com/package/metalsmith-discover-helpers

@@ -17,6 +17,9 @@
     "helpers"
   ],
   "author": "Kevin Van Lierde <kevin.van.lierde@gmail.com> (https://webketje.com)",
+  "engines" : {
+    "node" : ">=8"
+  },
   "main": "lib/index.js",
   "scripts": {
     "test": "ospec",
