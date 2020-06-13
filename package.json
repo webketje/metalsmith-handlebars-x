@@ -22,10 +22,11 @@
   },
   "main": "lib/index.js",
   "scripts": {
-    "test": "ospec",
+    "test": "nyc ospec",
     "format": "prettier --write .",
     "lint": "eslint .",
-    "release": "release-it"
+    "release": "release-it",
+    "codecov": "nyc report --reporter=text-lcov > ./coverage.info && cat ./coverage.info | node_modules/coveralls/bin/coveralls.js"
   },
   "directories": {
     "test": "./tests",
@@ -55,6 +56,8 @@
     "metalsmith-layouts": "^2.3.1",
     "ospec": "*",
     "prettier": "^2.0.5",
-    "release-it": "^13.6.2"
+    "release-it": "^13.6.2",
+    "nyc": "^15.1.0",
+    "coveralls": "^3.1.0"
   }
 }
