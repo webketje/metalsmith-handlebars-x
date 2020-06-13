@@ -7,7 +7,7 @@ Combines all of [metalsmith-handlebars], [metalsmith-handlebars-contents], [meta
 [![metalsmith: plugin][metalsmith-badge]][metalsmith-url]
 [![npm: version][npm-badge]][npm-url]
 [![travis: build][ci-badge]][ci-url]
-[![code coverage](codecov-badge)](codecov-url)
+[![code coverage](codecov-badge)][codecov-url]
 [![license: LGPL-3.0][license-badge]][license-url]
 
 ## Features
@@ -128,7 +128,7 @@ register them directly on a Handlebars instance passed to the `instance` option.
 
 ### Metadata mapping
 
-Specify a custom `metadata` option to map file & global metadata in your templates, e.g:
+Specify a custom `context` option to map file & global metadata in your templates, e.g:
 
 ```js
 context: function(filemeta, globalmeta) {
