@@ -62,7 +62,7 @@ var partials = {
   }
 };
 
-function cleanup() { }
+function cleanup() {}
 
 test.spec('Handlebars.partials support', function () {
   var files;
@@ -88,11 +88,12 @@ test.spec('Handlebars.partials support', function () {
             }
           },
           context: (file, metadata) => {
-            return Object.assign({
-              extraProperty: 'extra'
-            },
-            metadata,
-            file
+            return Object.assign(
+              {
+                extraProperty: 'extra'
+              },
+              metadata,
+              file
             );
           }
         })
@@ -140,11 +141,13 @@ test.spec('Handlebars.partials support', function () {
     test(files['posts/invalid-layout.hbs'].contents.toString()).equals('test:');
   });
 
-  // API: 
-  test("should provide functional helpers", () => {
-    test(helpers.call((...args) => args.join(),1,2,true,null)).equals('1,2,true');
+  // API:
+  test('should provide functional helpers', () => {
+    test(helpers.call((...args) => args.join(), 1, 2, true, null)).equals(
+      '1,2,true'
+    );
 
-    var context = { data: { root: {}}};
+    var context = { data: { root: {} } };
     helpers.set('x', false, context);
     test(context.data.root.x).equals(false);
   });

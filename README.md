@@ -7,6 +7,7 @@ Combines all of [metalsmith-handlebars], [metalsmith-handlebars-contents], [meta
 [![metalsmith: plugin][metalsmith-badge]][metalsmith-url]
 [![npm: version][npm-badge]][npm-url]
 [![travis: build][ci-badge]][ci-url]
+[![code coverage](codecov-badge)](codecov-url)
 [![license: LGPL-3.0][license-badge]][license-url]
 
 ## Features
@@ -71,7 +72,8 @@ set DEBUG=metalsmith-handlebars-x
 
 ### Partials
 
-Partials will be looked for in the directory specified in the `partials` option.  
+Partials will be looked for in the directory specified in the `partials` option.
+Partials are automatically removed from the build output unless `layout: false`.
 A partial at `partials/blockquote.hbs` will be usable in templates as `blockquote`.  
 A partial at `partials/layout/default.hbs` will be usable in templates as `layout/default`.
 
@@ -142,6 +144,12 @@ In your templates:
 ```html
 {{ site.sitename }} {{ page.stats.birthTime }}
 ```
+
+### File extensions
+
+In a future version metalsmith-handlebars-x will allow to rename the file extension.
+For now, you can use [metalsmith-rename] or [metalsmith-layouts] for modifying the file extension.
+
 ### Usage with handlebars-layouts
 
 Relatively straight-forward:
@@ -171,11 +179,14 @@ metalsmith-handlebars-x will then only compile file `contents`. See [test.js](./
 [ci-url]: https://travis-ci.org/webketje/metalsmith-handlebars-x
 [license-badge]: https://img.shields.io/github/license/webketje/metalsmith-handlebars-x
 [license-url]: https://choosealicense.com/licenses/lgpl-3.0/
+[codecov-badge]: https://coveralls.io/repos/github/webketje/metalsmith-handlebars-x/badge.svg
+[codecov-url]: https://coveralls.io/github/webketje/metalsmith-handlebars-x
 [metalsmith-badge]: https://img.shields.io/badge/metalsmith-plugin-green.svg?longCache=true
 [metalsmith-url]: https://metalsmith.io/
 [metalsmith-handlebars]: https://www.npmjs.com/package/metalsmith-handlebars
 [metalsmith-layouts]: https://www.npmjs.com/package/metalsmith-layouts
 [handlebars-layouts]: https://www.npmjs.com/package/handlebars-layouts
+[handlebars-rename]: https://www.npmjs.com/package/metalsmith-rename
 [metalsmith-handlebars-contents]: https://www.npmjs.com/package/metalsmith-handlebars-contents
 [metalsmith-handlebars-layouts]: https://www.npmjs.com/package/metalsmith-handlebars-layouts
 [metalsmith-discover-helpers]: https://www.npmjs.com/package/metalsmith-discover-helpers
