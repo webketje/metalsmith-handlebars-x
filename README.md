@@ -7,7 +7,7 @@ Combines all of [metalsmith-handlebars], [metalsmith-handlebars-contents], [meta
 [![metalsmith: plugin][metalsmith-badge]][metalsmith-url]
 [![npm: version][npm-badge]][npm-url]
 [![travis: build][ci-badge]][ci-url]
-[![code coverage](codecov-badge)][codecov-url]
+[![code coverage][codecov-badge]][codecov-url]
 [![license: LGPL-3.0][license-badge]][license-url]
 
 ## Features
@@ -46,7 +46,7 @@ metalsmith.use(xhandlebars({
   instance: require('handlebars'),
   pattern: '**/*.{hbs,handlebars}',
   layout: true,
-  partials: '**/partials/**.{hbs,handlebars}',
+  partials: 'partials',
   helpers: {},
   context: (filemeta, globalmeta) => Object.assign({}, globalmeta, filemeta)
 });
@@ -179,7 +179,7 @@ metalsmith-handlebars-x will then only compile file `contents`. See [test.js](./
 [ci-url]: https://travis-ci.org/webketje/metalsmith-handlebars-x
 [license-badge]: https://img.shields.io/github/license/webketje/metalsmith-handlebars-x
 [license-url]: https://choosealicense.com/licenses/lgpl-3.0/
-[codecov-badge]: https://coveralls.io/repos/github/webketje/metalsmith-handlebars-x/badge.svg
+[codecov-badge]: https://img.shields.io/coveralls/github/webketje/metalsmith-handlebars-x
 [codecov-url]: https://coveralls.io/github/webketje/metalsmith-handlebars-x
 [metalsmith-badge]: https://img.shields.io/badge/metalsmith-plugin-green.svg?longCache=true
 [metalsmith-url]: https://metalsmith.io/
