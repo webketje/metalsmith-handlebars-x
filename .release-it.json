@@ -1,14 +1,14 @@
 {
   "hooks": {
     "before:init": ["npm run lint", "npm test"],
-    "after:bump": "node_modules/.bin/auto-changelog -p"
+    "after:bump": "node_modules/.bin/auto-changelog -l 10 --sort-commits date -p"
   },
   "git": {
     "commitMessage": "Release ${version}",
     "commitArgs": ["-S"],
     "tagAnnotation": "Release ${version}",
     "tagArgs": ["-s"],
-    "changelog": "git log --pretty=format:\"* %s (%h)\" ${from}...${to}"
+    "changelog": "git log --no-merges --pretty=format:\"* %s (%h)\" ${from}...${to}"
   },
   "npm": {
     "publish": true
@@ -16,7 +16,6 @@
   "github": {
     "release": true,
     "releaseName": "metalsmith-handlebars-x ${version}",
-    "releaseNotes": true,
     "tokenRef": "GITHUB_TOKEN"
   }
 }

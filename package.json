@@ -43,6 +43,7 @@
   },
   "devDependencies": {
     "auto-changelog": "^2.0.0",
+    "coveralls": "^3.1.0",
     "eslint": "^7.2.0",
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-import": "^2.20.2",
@@ -54,10 +55,9 @@
     "metalsmith": "^2.3.0",
     "metalsmith-discover-partials": "^0.1.2",
     "metalsmith-layouts": "^2.3.1",
+    "nyc": "^15.1.0",
     "ospec": "*",
     "prettier": "^2.0.5",
-    "release-it": "^13.6.2",
-    "nyc": "^15.1.0",
-    "coveralls": "^3.1.0"
+    "release-it": "^13.6.2"
   }
 }
