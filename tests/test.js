@@ -3,6 +3,27 @@ var metalsmith = require('metalsmith');
 var plugin = require('../lib');
 var helpers = require('../lib/helpers');
 var hbs = require('handlebars');
+var path = require('path');
+
+// make tests work on Windows (backslash -> slash, \r\n -> \n)
+function normalizeFiles(files) {
+  return Object.assign(
+    files,
+    Object.keys(files).reduce((result, p) => {
+      var pNew = p.replace(/\\|\//g, path.sep);
+      result[pNew] = files[p];
+      result[pNew].contents = Buffer.from(
+        files[p].contents.toString().replace(/\r\n/g, '\n')
+      );
+      delete files[p];
+      return result;
+    }, {})
+  );
+}
+
+function contentsOf(files, p) {
+  return files[p.replace(/\\|\//g, path.sep)].contents.toString();
+}
 
 var testfiles = {
   'posts/simple.hbs': {
@@ -75,7 +96,7 @@ test.spec('Handlebars.partials support', function () {
       .destination('./dist')
       .ignore('**')
       .use((files, m, done) => {
-        Object.assign(files, partials, testfiles);
+        normalizeFiles(Object.assign(files, partials, testfiles));
         setImmediate(done);
       })
       .use(
@@ -99,11 +120,7 @@ test.spec('Handlebars.partials support', function () {
         })
       )
       .process((err, fs) => {
-        if (err) {
-          done(err);
-          console.log(err);
-          return;
-        }
+        if (err) return done(err);
         files = fs;
         done();
       });
@@ -111,19 +128,13 @@ test.spec('Handlebars.partials support', function () {
 
   // partials
   test('should support simple partial loading from root dir', () => {
-    test(files['posts/simple.hbs'].contents.toString()).equals(
-      '<h1>test:simple</h1>'
-    );
+    test(contentsOf(files, 'posts/simple.hbs')).equals('<h1>test:simple</h1>');
   });
   test('should support relative partial loading from subdir', () => {
-    test(files['posts/relative-partials/index.hbs'].contents.toString()).equals(
-      'test:local,partial'
-    );
+    test(contentsOf(files, 'posts/relative-partials/index.hbs')).equals('test:local,partial');
   });
   test('should support nested partial loading from root dir & inline partials', () => {
-    test(
-      files['posts/relative-partials2/inline-partials.hbs'].contents.toString()
-    ).equals('test:layout');
+    test(contentsOf(files, 'posts/relative-partials2/inline-partials.hbs')).equals('test:layout');
   });
   test('should support nested partial loading from subdir', () => {
     test(
@@ -133,12 +144,10 @@ test.spec('Handlebars.partials support', function () {
 
   // API: layout
   test('should render with layout when layout:true and layout is found', () => {
-    test(files['posts/valid-layout.hbs'].contents.toString()).equals(
-      'test:valid layout'
-    );
+    test(contentsOf(files, 'posts/valid-layout.hbs')).equals('test:valid layout');
   });
   test('should render without layout when layout:true and layout is not found', () => {
-    test(files['posts/invalid-layout.hbs'].contents.toString()).equals('test:');
+    test(contentsOf(files, 'posts/invalid-layout.hbs')).equals('test:');
   });
 
   // API:
@@ -159,14 +168,12 @@ test.spec('Handlebars.partials support', function () {
     ).equals(Object.keys(helpers).length);
   });
   test('should render helpers when provided through options or as part of instance', () => {
-    test(files['api-helpers.hbs'].contents.toString()).equals(
-      'test:local & instance helpers'
-    );
+    test(contentsOf(files, 'api-helpers.hbs')).equals('test:local & instance helpers');
   });
 
-  // API: data
-  test('should allow template context to be modified with a data function', () => {
-    test(files['api-data.hbs'].contents.toString()).equals('test:extra');
+  // API: context
+  test('should allow template context to be modified with a context function', () => {
+    test(contentsOf(files, 'api-data.hbs')).equals('test:extra');
   });
 
   test.after(cleanup);
@@ -202,12 +209,10 @@ test.spec('Metalsmith plugins interop', function () {
       .process((err, result) => {
         if (err) return done(err);
 
-        test(result['test.hbs'].contents.toString()).equals(
-          'test:layout included'
-        );
-        test(result['posts/test.hbs'].contents.toString()).equals(
-          'test:layout included'
-        );
+        result = normalizeFiles(result);
+
+        test(contentsOf(result, 'test.hbs')).equals('test:layout included');
+        test(contentsOf(result, 'posts/test.hbs')).equals('test:layout included');
 
         done();
       });
@@ -216,7 +221,11 @@ test.spec('Metalsmith plugins interop', function () {
   test('should work well with handlebars-layouts', (done) => {
     hbs.registerHelper(require('handlebars-layouts')(hbs));
 
-    instance.use(plugin({ instance: hbs })).process((err, files) => {
+    instance.use(plugin({ instance: hbs })).process((err, result) => {
+      if (err) return done(err);
+
+      result = normalizeFiles(result); // windows compat
+
       var expected =
         [
           '<h1>Goodnight Moon</h1>',
@@ -226,11 +235,9 @@ test.spec('Metalsmith plugins interop', function () {
           '<p>&copy; 1999</p>'
         ].join('\n') + '\n';
 
-      test(
-        files['posts/handlebars-layouts-post.hbs'].contents.toString()
-      ).equals(expected);
+      test(contentsOf(result, 'posts/handlebars-layouts-post.hbs')).equals(expected);
 
-      done(err);
+      done();
     });
   });
 
