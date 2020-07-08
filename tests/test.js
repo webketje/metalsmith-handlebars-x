@@ -52,6 +52,9 @@ var testfiles = {
     layout: 'invalid-layout',
     contents: Buffer.from('test:')
   },
+  'posts/local-partial-override/index.hbs': {
+    contents: Buffer.from("{{> simple 'test:local-override' }}")
+  },
   'api-helpers.hbs': {
     contents: Buffer.from(
       "{{ prefix 'local' 'test:' }} & {{ instancehelper }} helpers"
@@ -80,6 +83,9 @@ var partials = {
   },
   'posts/nested-relative-partials/partials/nested/child.hbs': {
     contents: Buffer.from('child,{{ @partial-block }}')
+  },
+  'posts/local-partial-override/partials/simple.hbs': {
+    contents: Buffer.from('<p>{{ this }}</p>')
   }
 };
 
@@ -137,9 +143,10 @@ test.spec('Handlebars.partials support', function () {
     test(contentsOf(files, 'posts/relative-partials2/inline-partials.hbs')).equals('test:layout');
   });
   test('should support nested partial loading from subdir', () => {
-    test(
-      files['posts/nested-relative-partials/index.hbs'].contents.toString()
-    ).equals('test:parent,child,grandchild');
+    test(contentsOf(files, 'posts/nested-relative-partials/index.hbs')).equals('test:parent,child,grandchild');
+  });
+  test('should overwrite global with local partials', () => {
+    test(contentsOf(files, 'posts/local-partial-override/index.hbs')).equals('<p>test:local-override</p>');
   });
 
   // API: layout
