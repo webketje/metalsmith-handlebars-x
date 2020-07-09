@@ -12,9 +12,7 @@ function normalizeFiles(files) {
     Object.keys(files).reduce((result, p) => {
       var pNew = p.replace(/\\|\//g, path.sep);
       result[pNew] = files[p];
-      result[pNew].contents = Buffer.from(
-        files[p].contents.toString().replace(/\r\n/g, '\n')
-      );
+      result[pNew].contents = Buffer.from(files[p].contents.toString().replace(/\r\n/g, '\n'));
       delete files[p];
       return result;
     }, {})
@@ -27,7 +25,7 @@ function contentsOf(files, p) {
 
 var testfiles = {
   'posts/error.hbs': {
-    contents: Buffer.from("{{#if }}")
+    contents: Buffer.from('{{#if }}')
   },
   'posts/simple.hbs': {
     contents: Buffer.from("{{> simple 'test:simple'}}")
@@ -59,9 +57,7 @@ var testfiles = {
     contents: Buffer.from("{{> simple 'test:local-override' }}")
   },
   'api-helpers.hbs': {
-    contents: Buffer.from(
-      "{{ prefix 'local' 'test:' }} & {{ instancehelper }} helpers"
-    )
+    contents: Buffer.from("{{ prefix 'local' 'test:' }} & {{ instancehelper }} helpers")
   },
   'api-data.hbs': {
     contents: Buffer.from('test:{{ extraProperty }}')
@@ -146,10 +142,14 @@ test.spec('Handlebars.partials support', function () {
     test(contentsOf(files, 'posts/relative-partials2/inline-partials.hbs')).equals('test:layout');
   });
   test('should support nested partial loading from subdir', () => {
-    test(contentsOf(files, 'posts/nested-relative-partials/index.hbs')).equals('test:parent,child,grandchild');
+    test(contentsOf(files, 'posts/nested-relative-partials/index.hbs')).equals(
+      'test:parent,child,grandchild'
+    );
   });
   test('should overwrite global with local partials', () => {
-    test(contentsOf(files, 'posts/local-partial-override/index.hbs')).equals('<p>test:local-override</p>');
+    test(contentsOf(files, 'posts/local-partial-override/index.hbs')).equals(
+      '<p>test:local-override</p>'
+    );
   });
   test('should log a debug message when a Handlebars compile error occurs', () => {
     test(contentsOf(files, 'posts/error.hbs')).equals('{{#if }}');
@@ -165,9 +165,7 @@ test.spec('Handlebars.partials support', function () {
 
   // API:
   test('should provide functional helpers', () => {
-    test(helpers.call((...args) => args.join(), 1, 2, true, null)).equals(
-      '1,2,true'
-    );
+    test(helpers.call((...args) => args.join(), 1, 2, true, null)).equals('1,2,true');
 
     var context = { data: { root: {} } };
     helpers.set('x', false, context);
@@ -175,10 +173,9 @@ test.spec('Handlebars.partials support', function () {
   });
 
   test("should register default 'call' & 'set' helpers", () => {
-    test(
-      Object.keys(hbs.helpers).filter((h) => Object.keys(helpers).includes(h))
-        .length
-    ).equals(Object.keys(helpers).length);
+    test(Object.keys(hbs.helpers).filter((h) => Object.keys(helpers).includes(h)).length).equals(
+      Object.keys(helpers).length
+    );
   });
   test('should render helpers when provided through options or as part of instance', () => {
     test(contentsOf(files, 'api-helpers.hbs')).equals('test:local & instance helpers');

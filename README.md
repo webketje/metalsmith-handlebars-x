@@ -89,10 +89,7 @@ or by passing the Handlebars instance to the plugin:
 
 ```js
 var Handlebars = require('handlebars');
-Handlebars.registerPartial(
-  'blockquote',
-  '<blockquote cite="{{url}}">{{ quote }}</blockquote>'
-);
+Handlebars.registerPartial('blockquote', '<blockquote cite="{{url}}">{{ quote }}</blockquote>');
 
 metalsmith.use(handlebars({ instance: Handlebars }));
 ```
