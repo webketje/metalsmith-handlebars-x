@@ -26,6 +26,9 @@ function contentsOf(files, p) {
 }
 
 var testfiles = {
+  'posts/error.hbs': {
+    contents: Buffer.from("{{#if }}")
+  },
   'posts/simple.hbs': {
     contents: Buffer.from("{{> simple 'test:simple'}}")
   },
@@ -148,6 +151,9 @@ test.spec('Handlebars.partials support', function () {
   test('should overwrite global with local partials', () => {
     test(contentsOf(files, 'posts/local-partial-override/index.hbs')).equals('<p>test:local-override</p>');
   });
+  test('should log a debug message when a Handlebars compile error occurs', () => {
+    test(contentsOf(files, 'posts/error.hbs')).equals('{{#if }}');
+  });
 
   // API: layout
   test('should render with layout when layout:true and layout is found', () => {
@@ -190,10 +196,10 @@ test.spec('Metalsmith plugins interop', function () {
   var instance;
 
   test.beforeEach(() => {
-    instance = metalsmith(require('path').join(__dirname, 'mocks'))
+    instance = metalsmith(path.join(__dirname, 'mocks'))
       .source('.')
       .destination('./dist')
-      .use(plugin({ layout: false, instance: hbs }));
+      .use(plugin({ layout: false, instance: hbs, pattern: ['**/*.hbs'] }));
   });
 
   test('should work well with metalsmith-layouts when layouts:false', (done) => {
@@ -228,24 +234,27 @@ test.spec('Metalsmith plugins interop', function () {
   test('should work well with handlebars-layouts', (done) => {
     hbs.registerHelper(require('handlebars-layouts')(hbs));
 
-    instance.use(plugin({ instance: hbs })).process((err, result) => {
-      if (err) return done(err);
+    instance
+      .use(plugin({ instance: hbs, helpers: false }))
+      .ignore('**/test.hbs')
+      .process((err, result) => {
+        if (err) return done(err);
 
-      result = normalizeFiles(result); // windows compat
+        result = normalizeFiles(result); // windows compat
 
-      var expected =
-        [
-          '<h1>Goodnight Moon</h1>',
-          '<p>Lorem ipsum.</p>',
-          '<p>Dolor sit amet.</p>',
-          '<p>MIT License</p>',
-          '<p>&copy; 1999</p>'
-        ].join('\n') + '\n';
+        var expected =
+          [
+            '<h1>Goodnight Moon</h1>',
+            '<p>Lorem ipsum.</p>',
+            '<p>Dolor sit amet.</p>',
+            '<p>MIT License</p>',
+            '<p>&copy; 1999</p>'
+          ].join('\n') + '\n';
 
-      test(contentsOf(result, 'posts/handlebars-layouts-post.hbs')).equals(expected);
+        test(contentsOf(result, 'posts/handlebars-layouts-post.hbs')).equals(expected);
 
-      done();
-    });
+        done();
+      });
   });
 
   test.after(cleanup);
