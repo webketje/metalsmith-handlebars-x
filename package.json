@@ -11,12 +11,12 @@
   },
   "keywords": [
     "metalsmith",
-    "plugin",
+    "metalsmith-plugin",
     "handlebars",
     "partials",
     "helpers"
   ],
-  "author": "Kevin Van Lierde <kevin.van.lierde@gmail.com> (https://webketje.com)",
+  "author": "Kevin Van Lierde (https://webketje.com)",
   "engines": {
     "node": ">=8"
   },
@@ -37,27 +37,26 @@
     "/lib/helpers.js"
   ],
   "dependencies": {
-    "debug": "*",
-    "handlebars": "*",
-    "multimatch": "*"
+    "debug": "^4.3.3",
+    "handlebars": "^4.7.7"
   },
   "devDependencies": {
-    "auto-changelog": "^2.0.0",
-    "coveralls": "^3.1.0",
-    "eslint": "^7.2.0",
-    "eslint-config-standard": "^14.1.1",
-    "eslint-plugin-import": "^2.20.2",
+    "auto-changelog": "^2.4.0",
+    "coveralls": "^3.1.1",
+    "eslint": "^8.8.0",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.1",
     "handlebars-layouts": "^3.1.4",
-    "jstransformer-handlebars": "^1.1.0",
-    "metalsmith": "^2.3.0",
+    "jstransformer-handlebars": "^1.2.0",
+    "metalsmith": "^2.4.1",
     "metalsmith-discover-partials": "^0.1.2",
     "metalsmith-layouts": "^2.3.1",
     "nyc": "^15.1.0",
     "ospec": "*",
-    "prettier": "^2.0.5",
-    "release-it": "^13.6.2"
+    "prettier": "^2.5.1",
+    "release-it": "^14.12.4"
+  },
+  "peerDependencies": {
+    "metalsmith": "^2.4.1"
   }
 }
