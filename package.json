@@ -18,15 +18,17 @@
   ],
   "author": "Kevin Van Lierde (https://webketje.com)",
   "engines": {
-    "node": ">=8"
+    "node": ">=10"
   },
   "main": "lib/index.js",
   "scripts": {
     "test": "nyc ospec",
     "format": "prettier --write .",
-    "lint": "eslint .",
+    "format:check": "prettier --check .",
+    "lint": "eslint --fix .",
+    "lint:check": "eslint --fix-dry-run .",
     "release": "release-it",
-    "codecov": "nyc report --reporter=text-lcov > ./coverage.info && cat ./coverage.info | node_modules/coveralls/bin/coveralls.js"
+    "coveralls": "nyc report --reporter=text-lcov > ./coverage.info && cat ./coverage.info | node_modules/coveralls/bin/coveralls.js"
   },
   "directories": {
     "test": "./tests",
@@ -52,7 +54,7 @@
     "metalsmith-discover-partials": "^0.1.2",
     "metalsmith-layouts": "^2.3.1",
     "nyc": "^15.1.0",
-    "ospec": "*",
+    "ospec": "^4.1.1",
     "prettier": "^2.5.1",
     "release-it": "^14.12.4"
   },
