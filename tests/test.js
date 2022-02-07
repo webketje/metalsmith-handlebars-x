@@ -1,16 +1,16 @@
-var test = require('ospec');
-var metalsmith = require('metalsmith');
-var plugin = require('../lib');
-var helpers = require('../lib/helpers');
-var hbs = require('handlebars');
-var path = require('path');
+const test = require('ospec');
+const metalsmith = require('metalsmith');
+const plugin = require('../lib');
+const helpers = require('../lib/helpers');
+const hbs = require('handlebars');
+const path = require('path');
 
 // make tests work on Windows (backslash -> slash, \r\n -> \n)
 function normalizeFiles(files) {
   return Object.assign(
     files,
     Object.keys(files).reduce((result, p) => {
-      var pNew = p.replace(/\\|\//g, path.sep);
+      const pNew = p.replace(/\\|\//g, path.sep);
       result[pNew] = files[p];
       result[pNew].contents = Buffer.from(files[p].contents.toString().replace(/\r\n/g, '\n'));
       delete files[p];
@@ -23,7 +23,7 @@ function contentsOf(files, p) {
   return files[p.replace(/\\|\//g, path.sep)].contents.toString();
 }
 
-var testfiles = {
+const testfiles = {
   'posts/error.hbs': {
     contents: Buffer.from('{{#if }}')
   },
@@ -64,7 +64,7 @@ var testfiles = {
   }
 };
 
-var partials = {
+const partials = {
   'partials/simple.hbs': {
     contents: Buffer.from('<h1>{{ this }}</h1>')
   },
@@ -91,7 +91,7 @@ var partials = {
 function cleanup() {}
 
 test.spec('Handlebars.partials support', function () {
-  var files;
+  let files;
 
   test.before(function (done) {
     hbs.registerHelper('instancehelper', () => 'instance');
@@ -167,7 +167,7 @@ test.spec('Handlebars.partials support', function () {
   test('should provide functional helpers', () => {
     test(helpers.call((...args) => args.join(), 1, 2, true, null)).equals('1,2,true');
 
-    var context = { data: { root: {} } };
+    const context = { data: { root: {} } };
     helpers.set('x', false, context);
     test(context.data.root.x).equals(false);
   });
@@ -190,7 +190,7 @@ test.spec('Handlebars.partials support', function () {
 });
 
 test.spec('Metalsmith plugins interop', function () {
-  var instance;
+  let instance;
 
   test.beforeEach(() => {
     instance = metalsmith(path.join(__dirname, 'mocks'))
@@ -202,13 +202,13 @@ test.spec('Metalsmith plugins interop', function () {
   test('should work well with metalsmith-layouts when layouts:false', (done) => {
     require('jstransformer-handlebars');
 
-    var layouts = require('metalsmith-layouts')({
+    const layouts = require('metalsmith-layouts')({
       directory: './partials',
       pattern: '**/test.hbs',
       suppressNoFilesError: true
     });
 
-    var discoverPartials = require('metalsmith-discover-partials')({
+    const discoverPartials = require('metalsmith-discover-partials')({
       directory: './mocks/partials'
     });
 
@@ -239,7 +239,7 @@ test.spec('Metalsmith plugins interop', function () {
 
         result = normalizeFiles(result); // windows compat
 
-        var expected =
+        const expected =
           [
             '<h1>Goodnight Moon</h1>',
             '<p>Lorem ipsum.</p>',

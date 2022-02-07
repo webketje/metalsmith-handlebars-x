@@ -1,10 +1,15 @@
 env:
-  commonjs: true
+  es6: true
+  node: true
 extends:
-  - standard
+  - eslint:recommended
+  - prettier
 parserOptions:
   ecmaVersion: 11
 rules:
-  semi: 0
+  semi: 2
   curly: 1
   space-before-function-paren: 0
+  prefer-const: 2
+  no-var: 2
+  no-console: 2
