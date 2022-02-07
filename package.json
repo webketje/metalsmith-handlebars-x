@@ -28,7 +28,7 @@
     "lint": "eslint --fix .",
     "lint:check": "eslint --fix-dry-run .",
     "release": "release-it",
-    "coveralls": "nyc report --reporter=text-lcov > ./coverage.info && cat ./coverage.info | node_modules/coveralls/bin/coveralls.js"
+    "coveralls": "nyc report --reporter=text-lcov > ./coverage.info && cat ./coverage.info | coveralls"
   },
   "directories": {
     "test": "./tests",

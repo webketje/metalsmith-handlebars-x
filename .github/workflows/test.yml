@@ -1,38 +1,7 @@
 on: [push, pull_request]
 
 jobs:
-  pre-test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          cache: 'npm'
-
-      - run: npm install
-
-      - name: Formatting
-        run: npm run format:check
-
-      - name: Linting
-        run: npm run lint:check
-
-  branch-test:
-    if: github.ref_name != 'master' && success()
-    needs: pre-test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          cache: 'npm'
-
-      - run: npm install
-      - run: npm test
-
   test:
-    if: github.ref_name == 'master' && success()
-    needs: pre-test
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -41,11 +10,23 @@ jobs:
     name: Testing Node ${{ matrix.node }} on ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
+
       - uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node }}
           cache: 'npm'
 
       - run: npm install
+
+      - if: matrix.os == 'ubuntu-latest' && matrix.node-version == '16'
+        run: npm run format:check
+
+      - if: matrix.os == 'ubuntu-latest' && matrix.node-version == '16'
+        run: npm run lint:check
+
       - run: npm test
-      - run: npm run coveralls
+
+      - if: matrix.os == 'ubuntu-latest' && matrix.node-version == '16'
+        uses: coverallsapp/github-action@v1.1.2
+        with:
+          github-token: ${{ github.token }}

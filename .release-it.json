@@ -8,7 +8,7 @@
     "commitArgs": ["-S"],
     "tagAnnotation": "Release ${version}",
     "tagArgs": ["-s"],
-    "changelog": "git log --no-merges --pretty=format:\"* %s (%h)\" ${from}...${to}"
+    "changelog": "git log --no-merges --grep=\"^(ci|chore|dev|Release)\" --invert-grep -E --pretty=format:\"* %s (%h)\" ${from}...${to}"
   },
   "npm": {
     "publish": true
