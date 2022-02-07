@@ -6,7 +6,7 @@ jobs:
     strategy:
       matrix:
         os: ['ubuntu-latest', 'windows-latest']
-        node: ['10', '12', '14', '16']
+        node: ['12', '14', '16']
     name: Testing Node ${{ matrix.node }} on ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
@@ -18,15 +18,19 @@ jobs:
 
       - run: npm install
 
-      - if: matrix.os == 'ubuntu-latest' && matrix.node-version == '16'
+      - if: matrix.os == 'ubuntu-latest' && matrix.node == '16'
         run: npm run format:check
 
-      - if: matrix.os == 'ubuntu-latest' && matrix.node-version == '16'
+      - if: matrix.os == 'ubuntu-latest' && matrix.node == '16'
         run: npm run lint:check
 
       - run: npm test
 
-      - if: matrix.os == 'ubuntu-latest' && matrix.node-version == '16'
+      - if: matrix.os == 'ubuntu-latest' && matrix.node == '16'
+        run: npm run coverage
+
+      - if: matrix.os == 'ubuntu-latest' && matrix.node == '16'
         uses: coverallsapp/github-action@v1.1.2
         with:
           github-token: ${{ github.token }}
+          path-to-lcov: ./coverage.info
