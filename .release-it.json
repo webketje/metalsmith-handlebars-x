@@ -11,7 +11,7 @@
     "changelog": "git log --no-merges --grep=\"^(ci|chore|dev|Release)\" --invert-grep -E --pretty=format:\"* %s (%h)\" ${from}...${to}"
   },
   "npm": {
-    "publish": true
+    "publish": false
   },
   "github": {
     "release": true,
