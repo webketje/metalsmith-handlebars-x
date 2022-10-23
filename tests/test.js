@@ -208,10 +208,10 @@ describe('Metalsmith plugins interop', function () {
       .use(plugin({ layout: false, instance: hbs, pattern: ['**/*.hbs'] }));
   });
 
-  it('should work well with metalsmith-layouts when layouts:false', (done) => {
+  it('should work well with @metalsmith/layouts when layouts:false', (done) => {
     require('jstransformer-handlebars');
 
-    const layouts = require('metalsmith-layouts')({
+    const layouts = require('@metalsmith/layouts')({
       directory: './partials',
       pattern: '**/test.hbs',
       suppressNoFilesError: true

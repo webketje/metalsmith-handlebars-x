@@ -145,7 +145,7 @@ In your templates:
 ### File extensions
 
 In a future version metalsmith-handlebars-x will allow to rename the file extension.
-For now, you can use [metalsmith-rename] or [metalsmith-layouts] for modifying the file extension.
+For now, you can use [metalsmith-rename] or [@metalsmith/layouts] for modifying the file extension.
 
 ### Usage with handlebars-layouts
 
@@ -161,10 +161,9 @@ Handlebars.registerHelper(hbsLayouts);
 metalsmith.use(xhandlebars({ instance: Handlebars }));
 ```
 
-### With metalsmith-layouts & metalsmith-discover-partials
+### With @metalsmith/layouts & metalsmith-discover-partials
 
-You can use this plugin together with metalsmith-layouts & discover-partials but you should specify `layout: false` in order to avoid conflicts.  
-metalsmith-handlebars-x will then only compile file `contents`. See [test.js](./tests/test.js#L174) for an example.
+You can use this plugin together with @metalsmith/layouts & metalsmith-discover-partials but you should specify `layout: false` in order to avoid conflicts. metalsmith-handlebars-x will then only compile file `contents`. See [test.js](./tests/test.js#L211) for an example.
 
 ## License
 
