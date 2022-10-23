@@ -1,4 +1,4 @@
-const { it, describe, before, beforeEach, after } = require('mocha');
+/* eslint-env node, mocha */
 const { strictEqual } = require('assert');
 const metalsmith = require('metalsmith');
 const plugin = require('../lib');
@@ -101,6 +101,7 @@ describe('Handlebars.partials support', function () {
       .source('.')
       .destination('./dist')
       .ignore('**')
+      .env('DEBUG', process.env.DEBUG)
       .use((files, m, done) => {
         normalizeFiles(Object.assign(files, partials, testfiles));
         setImmediate(done);
