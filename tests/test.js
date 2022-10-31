@@ -1,10 +1,11 @@
 /* eslint-env node, mocha */
-const { strictEqual } = require('assert');
+const { strictEqual, deepStrictEqual } = require('assert');
 const metalsmith = require('metalsmith');
 const plugin = require('../lib');
 const helpers = require('../lib/helpers');
 const hbs = require('handlebars');
 const path = require('path');
+const Metalsmith = require('metalsmith');
 
 // make tests work on Windows (backslash -> slash, \r\n -> \n)
 function normalizeFiles(files) {
@@ -12,7 +13,7 @@ function normalizeFiles(files) {
     files,
     Object.keys(files).reduce((result, p) => {
       const pNew = p.replace(/\\|\//g, path.sep);
-      result[pNew] = files[p];
+      result[pNew] = Object.assign({}, files[p]);
       result[pNew].contents = Buffer.from(files[p].contents.toString().replace(/\r\n/g, '\n'));
       delete files[p];
       return result;
@@ -25,9 +26,6 @@ function contentsOf(files, p) {
 }
 
 const testfiles = {
-  'posts/error.hbs': {
-    contents: Buffer.from('{{#if }}')
-  },
   'posts/simple.hbs': {
     contents: Buffer.from("{{> simple 'test:simple'}}")
   },
@@ -91,7 +89,76 @@ const partials = {
 
 function cleanup() {}
 
-describe('Handlebars.partials support', function () {
+describe('renameExtension option', function () {
+  let ms;
+
+  beforeEach(function () {
+    ms = metalsmith(__dirname)
+      .source('.')
+      .destination('./dist')
+      .ignore('**')
+      .env('DEBUG', process.env.DEBUG)
+      .env('NODE_ENV', process.env.NODE_ENV)
+      .use((files) => {
+        files['posts/simple.hbs'] = { contents: testfiles['posts/simple.hbs'].contents };
+        files['partials/simple.hbs'] = { contents: partials['partials/simple.hbs'].contents };
+        files['posts/simple.hbs'] = { contents: testfiles['posts/simple.hbs'].contents };
+      });
+  });
+
+  it('should not touch the extension when === null', function (done) {
+    ms.use(
+      plugin({
+        instance: hbs,
+        layout: true,
+        renameExtension: null
+      })
+    ).process((err, fs) => {
+      if (err) {
+        done(err);
+      } else {
+        deepStrictEqual(Object.keys(fs), ['posts/simple.hbs']);
+        done();
+      }
+    });
+  });
+
+  it('should trim the extension when === ""', function (done) {
+    ms.use(
+      plugin({
+        instance: hbs,
+        layout: true,
+        renameExtension: ''
+      })
+    ).process((err, fs) => {
+      if (err) {
+        done(err);
+      } else {
+        deepStrictEqual(Object.keys(fs), ['posts/simple']);
+        done();
+      }
+    });
+  });
+
+  it('should rename the extension when === ".<ext>"', function (done) {
+    ms.use(
+      plugin({
+        instance: hbs,
+        layout: true,
+        renameExtension: '.html'
+      })
+    ).process((err, fs) => {
+      if (err) {
+        done(err);
+      } else {
+        deepStrictEqual(Object.keys(fs), ['posts/simple.html']);
+        done();
+      }
+    });
+  });
+});
+
+describe('Handlebars.partials & helpers support', function () {
   let files;
 
   before(function (done) {
@@ -157,9 +224,6 @@ describe('Handlebars.partials support', function () {
       '<p>test:local-override</p>'
     );
   });
-  it('should log a debug message when a Handlebars compile error occurs', () => {
-    strictEqual(contentsOf(files, 'posts/error.hbs'), '{{#if }}');
-  });
 
   // API: layout
   it('should render with layout when layout:true and layout is found', () => {
@@ -197,6 +261,26 @@ describe('Handlebars.partials support', function () {
   });
 
   after(cleanup);
+});
+
+describe('Error handling', function () {
+  it('should throw when a Handlebars compile error occurs', (done) => {
+    Metalsmith(__dirname)
+      .source('.')
+      .ignore('**')
+      .env('DEBUG', process.env.DEBUG)
+      .use((files) => {
+        files[path.join('posts', 'error.hbs')] = {
+          contents: Buffer.from('{{#if }}')
+        };
+      })
+      .use(plugin())
+      .process((err) => {
+        strictEqual(err instanceof Error, true);
+        strictEqual(err.message.slice(0, 21), 'Parse error on line 1');
+        done();
+      });
+  });
 });
 
 describe('Metalsmith plugins interop', function () {

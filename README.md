@@ -48,7 +48,8 @@ metalsmith.use(xhandlebars({
   layout: true,
   partials: 'partials',
   helpers: {},
-  context: (filemeta, globalmeta) => Object.assign({}, globalmeta, filemeta)
+  context: (filemeta, globalmeta) => Object.assign({}, globalmeta, filemeta),
+  renameExtension: null
 });
 ```
 
@@ -144,8 +145,11 @@ In your templates:
 
 ### File extensions
 
-In a future version metalsmith-handlebars-x will allow to rename the file extension.
-For now, you can use [metalsmith-rename] or [@metalsmith/layouts] for modifying the file extension.
+With the `renameExtension` option you can choose what to do with a file's extension:
+
+- `null` or `undefined` does nothing (default)
+- `""` (empty string) removes the last extension (so `index.hbs` would become `index`, while `style.css.hbs` would become `style.css`)
+- `".<ext>"` renames the last extension to `<ext>`, for example `index.hbs` would become `index.html` if `renameExtension: '.html'`.
 
 ### Usage with handlebars-layouts
 
