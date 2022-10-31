@@ -100,9 +100,15 @@ describe('renameExtension option', function () {
       .env('DEBUG', process.env.DEBUG)
       .env('NODE_ENV', process.env.NODE_ENV)
       .use((files) => {
-        files['posts/simple.hbs'] = { contents: testfiles['posts/simple.hbs'].contents };
-        files['partials/simple.hbs'] = { contents: partials['partials/simple.hbs'].contents };
-        files['posts/simple.hbs'] = { contents: testfiles['posts/simple.hbs'].contents };
+        files[path.join('posts', 'simple.hbs')] = {
+          contents: testfiles['posts/simple.hbs'].contents
+        };
+        files[path.join('partials', 'simple.hbs')] = {
+          contents: partials['partials/simple.hbs'].contents
+        };
+        files[path.join('posts', 'simple.hbs')] = {
+          contents: testfiles['posts/simple.hbs'].contents
+        };
       });
   });
 
@@ -117,7 +123,7 @@ describe('renameExtension option', function () {
       if (err) {
         done(err);
       } else {
-        deepStrictEqual(Object.keys(fs), ['posts/simple.hbs']);
+        deepStrictEqual(Object.keys(fs), [path.join('posts', 'simple.hbs')]);
         done();
       }
     });
@@ -134,7 +140,7 @@ describe('renameExtension option', function () {
       if (err) {
         done(err);
       } else {
-        deepStrictEqual(Object.keys(fs), ['posts/simple']);
+        deepStrictEqual(Object.keys(fs), [path.join('posts', 'simple')]);
         done();
       }
     });
@@ -151,7 +157,7 @@ describe('renameExtension option', function () {
       if (err) {
         done(err);
       } else {
-        deepStrictEqual(Object.keys(fs), ['posts/simple.html']);
+        deepStrictEqual(Object.keys(fs), [path.join('posts', 'simple.html')]);
         done();
       }
     });
