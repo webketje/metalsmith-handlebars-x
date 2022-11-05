@@ -1,7 +1,7 @@
 {
   "hooks": {
     "before:init": ["npm run lint", "npm test"],
-    "after:bump": "node_modules/.bin/auto-changelog -l 10 --sort-commits date -p"
+    "after:bump": "node_modules/.bin/auto-changelog -l 10 --sort-commits date -p --ignore-commit-pattern '((dev|chore|ci):|skip changelog|Release)'"
   },
   "git": {
     "commitMessage": "Release ${version}",
