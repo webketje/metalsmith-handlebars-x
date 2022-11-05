@@ -1,6 +1,6 @@
 {
   "name": "metalsmith-handlebars-x",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "The best plugin for metalsmith + Handlebars. Global/local partials, in-place & layout compilation, and maximum flexibility.",
   "homepage": "https://github.com/webketje/metalsmith-handlebars-x#README.md",
   "bugs": "https://github.com/webketje/metalsmith-handlebars-x/issues",
